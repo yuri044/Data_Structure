@@ -1,4 +1,5 @@
 #include <iostream>
+#include<cctype>
 #include <string>
 
 using namespace std;
@@ -95,12 +96,15 @@ public:
     }
 
     void append(char element) {
-        Node* newNode = new Node;
-        newNode->value = element;
+
+        Node* newNode = new Node; //Make a new Node to add to the list 
+        newNode->value = element; // Insert input value to newNode
 
         if (size == 0) {
-            newNode->next = tail;
+
+            newNode->next = tail;   //
             tail->next = newNode;
+
         } else {
             newNode->next = tail->next;
             tail->next = newNode;
@@ -110,23 +114,24 @@ public:
     }
 
     int find(char cValue) const {
-        if (size == 0) {
+        if (size == 0) { //if size is 0, this means that there is no item to return
+
             throw "There is no item in the list";
         }
 
-        Node* current = tail->next;
+        Node* current = tail->next; //If there are items, let current point to tail;
         int index = 0;
 
         while (current != nullptr) {
-            if (current->value == cValue) {
-                return index;
+            if (current->value == cValue) { //if input value matches to the value in the list
+                return index; //Return that index of value
             }
 
-            current = current->next;
-            index++;
+            current = current->next; // Move to next item
+            index++; //Increment index by 1
         }
 
-        throw "There is no such character in this list";
+        throw "There is no such character in this list"; //If iteration done, and there is no such value, throw an error
     }
 
     int getLength()
@@ -159,7 +164,52 @@ public:
         }
     }
 
-};
+    void reverseCase()
+    {
+        Node* current = tail->next; //Let current points to the very first element
+        while(current! = nullptr) //Iterate until current reaches to nullptr 
+        {
+            if(islower(curent->value)) //if the current value is lowercase
+            {
+                current->value = toupper(current->value) // change it to the upper case
+            }
+
+            else if(isupper(current->value)) //if the current item is upper case
+            {
+                current->value = tolower(current->value) //change to lower case
+            }
+
+            current = current->next; //move to the next item
+        }
+
+
+    }
+
+    void add(char value)
+    {
+
+    }
+
+
+    //Operator overloading
+    String operator+(const String& other)
+    {
+        String result;
+        Node* current = this->tail->next;
+        while(current!=nullptr) //if the current is not nullptr
+        {
+            result.append(current->next); //Reuse append function to add to the new list
+            current = current->next; //Move to next item
+        }
+
+        current = other.tail->next; //current points to the other item
+        while(current!=nullptr) //if current is not nullptr
+        {
+            result.append(current->value); //add current item to the result
+        }
+
+        return result; //return the newly created list
+    }
 
 
 
