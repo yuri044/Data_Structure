@@ -7,7 +7,7 @@ using namespace std;
 
 class Node {
 public:
-    char value;
+    string value; //changed to string because append function wont work if value is char
     //Define a value with char
     Node* next;
     //pointer to next
@@ -33,7 +33,7 @@ public:
         newNode->value = sElement;
         //value = sElement 
         newNode->next = tail;  //newNode next is tail
-        tail-> = newNode; //tail->next should point to newNode
+        tail->next = newNode; //tail->next should point to newNode
         size++; //set the size increase by 1
     }
 
@@ -95,7 +95,7 @@ public:
         }
     }
 
-    String(String&& str) noexcept {
+    String(String&& str) noexcept { //Move constructor
         size = str.size;
         tail = str.tail;
 
@@ -116,7 +116,7 @@ public:
         {
             while(*element) //If there is an element
             {
-                newNode->value = element;
+                newNode->value = *element;
                 newNode->next = tail->next;
                 tail = newNode;//Make tail = newNode at the end
             }
@@ -126,10 +126,10 @@ public:
       
     }
 
-    void append(string string)
+    void append(string s) //s means string
     {
         Node* newNode = new Node; //Make a new Node to add string item to the list
-        newNode->value = string; //Store string item into the newNode
+        newNode->value = s; //Store string item into the newNode
 
         if(size == 0)
         {
@@ -143,6 +143,29 @@ public:
             tail->next = newNode;
             tail = newNode;
         }
+    }
+
+    const char* toCstr() const
+    {
+        if(size == 0)
+        {
+            throw("No item exist");
+        }
+
+            string str;
+            Node* current = tail->next;
+
+            do
+            {
+                str += current->value;
+                current = current->next;
+            }
+
+            while(current!=tail->next);
+
+
+        return str.c_str();
+
     }
 
     int find(char cValue) const {
@@ -183,7 +206,7 @@ public:
 
             Node* prev = nullptr; //Create previous node to reverse all nodes
             Node* next = nullptr;// Create next node 
-            Node* current = tail->next; //Make a current node that stores the very first element¥
+            Node* current = tail->next; //Make a current node that stores the very first element
             while(current!= tail)
             {
                 next = current->next; //next item points to the next current item
@@ -200,16 +223,16 @@ public:
     void reverseCase()
     {
         Node* current = tail->next; //Let current points to the very first element
-        while(current! = tail) //Iterate until current reaches to tail
+        while(current != tail) //Iterate until current reaches to tail
         {
-            if(islower(curent->value)) //if the current value is lowercase
+            if(islower(current->value)) //if the current value is lowercase
             {
-                current->value = toupper(current->value) // change it to the upper case
+                current->value = toupper(current->value); // change it to the upper case
             }
 
             else if(isupper(current->value)) //if the current item is upper case
             {
-                current->value = tolower(current->value) //change to lower case
+                current->value = tolower(current->value); //change to lower case
             }
 
             current = current->next; //move to the next item
@@ -237,7 +260,7 @@ public:
 
         do
         {
-            result.append(current->value)
+            result.append(current->value);
         }
         while(current!= other.tail->next);//if current is not nullptr
 
@@ -308,9 +331,12 @@ public:
 
     istream& operator>>(istream& is, String& string)
     {
+        Node* newNode = new Node;
+
         if(tail == nullptr)
         {
-            append(string)
+            tail = newNode; //tail becomes newNode
+            newNode->next = newNode; //newNode should point to itself
         }
 
         else
@@ -333,12 +359,12 @@ public:
 
         else
         {
-            Node* temp = tail->next;
-            //temporary value points to next head item
+            Node* temp = tail->next; //temporary value points to next head item
+            char char_at_index; //Define char that points to index
 
             for(int i = 0; i < index; temp = temp->next, i++)
             {
-               char char_at_index = temp->value;
+               char_at_index = temp->value;
             }
 
             return char_at_index;
